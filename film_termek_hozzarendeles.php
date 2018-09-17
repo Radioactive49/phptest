@@ -2,9 +2,9 @@
 
    //kapcsolodás
      $mysql_host = "localhost"; 
-     $mysql_database = "***"; 
-     $mysql_user = "***"; 
-     $mysql_password = "***";
+     $mysql_database = "cgphufzk_cgp"; 
+     $mysql_user = "cgphufzk_matyi"; 
+     $mysql_password = "Joskadb254";
      $kapcsolat = ($GLOBALS["___mysqli_ston"] = mysqli_connect( $mysql_host,  $mysql_user,  $mysql_password, $mysql_database )); 
       if ( ! $kapcsolat ) 
       { 
@@ -28,7 +28,11 @@
           array_push($termekek, " ");
           while ( $egy_sor = mysqli_fetch_object( $eredmeny_t ) ) 
           { 
-             array_push($termekek, $egy_sor->nev);
+             $values = array( );
+             
+             array_push($values, $egy_sor->id);
+             array_push($values, $egy_sor->nev);
+             array_push($termekek, $values);
           } 
           //filmek és termékek darabszáma
           $f_db=$eredmeny_f->num_rows;
@@ -43,9 +47,10 @@
                 trigger_error($this->mysqli->error, E_USER_ERROR);
                 return;
               }
-              $f_id = $_POST[$termekek[$i]];
+              $f_id = $_POST[$termekek[$i][0]];
               $stmt->bind_param('ss', $f_id, $nev);
-              $nev = $termekek[$i];
+              $nev = $termekek[$i][1];
+              //print $_POST[$termekek[$i]]."  ".$nev."<br>";
               $status = $stmt->execute();
               
               if ($status === false) {
@@ -64,17 +69,23 @@ function tablazat_rajzolas() {
           //rádiobuttonos táblázat kirajzolása
           //filmek és termékek tömb előállítása
           $eredmeny_f = mysqli_query($GLOBALS["___mysqli_ston"],  "SELECT * FROM Film"); 
+
           $filmek = array( );
           while ( $egy_sor = mysqli_fetch_object( $eredmeny_f ) ) 
           { 
             array_push($filmek, $egy_sor->nev);
           } 
           $eredmeny_t = mysqli_query($GLOBALS["___mysqli_ston"],  "SELECT * FROM Termek"); 
-          $termekek = array( );
+          
+          $termekek = array( ); //$termekek[i][id=0, nev=1]
           array_push($termekek, " ");
           while ( $egy_sor = mysqli_fetch_object( $eredmeny_t ) ) 
           { 
-             array_push($termekek, $egy_sor->nev);
+             $values = array( );
+             
+             array_push($values, $egy_sor->id);
+             array_push($values, $egy_sor->nev);
+             array_push($termekek, $values);
           } 
           $f_db=$eredmeny_f->num_rows;
           $t_db=$eredmeny_t->num_rows;
@@ -88,7 +99,7 @@ function tablazat_rajzolas() {
             print "<tr>";
             
             print "<th scope=\"row\">";
-            print $termekek[$i];
+            print $termekek[$i][1];
             print "</th>";
             
             for($j=0; $j<$f_db; $j++)
@@ -103,7 +114,7 @@ function tablazat_rajzolas() {
               else
               {
                 print "<td><center>";
-                print "<input type=\"radio\" name=\"".$termekek[$i]."\" value=\"".$filmek[$j]."\">";
+                print "<input type=\"radio\" name=\"".$termekek[$i][0]."\" value=\"".$filmek[$j]."\">";
                 print "</center></td>";
               }
                 

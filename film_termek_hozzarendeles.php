@@ -2,9 +2,9 @@
 
    //kapcsolodás
      $mysql_host = "localhost"; 
-     $mysql_database = "cgphufzk_cgp"; 
-     $mysql_user = "cgphufzk_matyi"; 
-     $mysql_password = "Joskadb254";
+     $mysql_database = "***";
+     $mysql_user = "***"; 
+     $mysql_password = "***";
      $kapcsolat = ($GLOBALS["___mysqli_ston"] = mysqli_connect( $mysql_host,  $mysql_user,  $mysql_password, $mysql_database )); 
       if ( ! $kapcsolat ) 
       { 
